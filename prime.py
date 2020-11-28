@@ -1,31 +1,55 @@
 #!/usr/local/bin/python3
 
 import argparse, math
+from collections import Counter
 
-parser = argparse.ArgumentParser()
+def primes(n):
+  # Returns a list of primes of n
+  factors = []
+  if n < 2:
+    print("There are no primes as number is less than 2.")
+    return(factors)
+  
+  # The upper limit of prime factors of n cannot be more then the sqrt rounded down
+  limit = int(math.sqrt(n))
 
-parser.add_argument("number", nargs="?", type=int, default=12,
-  help="Positive integer to factorize into primes, default 12")
+  # Initialize with first prime
+  i = 2
+  while i <= limit:
+    if n % i: # is n divisible by i?
+      i = i + 1 # if not, increment i by 1
+    else:
+      factors.append(i) # otherwise, i is factor of n
+      n = n / i 
+      limit = int(math.sqrt(n))
+  factors.append(int(n))
+  return(factors)
 
-args = parser.parse_args()
 
-n = int(args.number)
-if n < 2:
-  print("There are no primes as number is less than 2.")
-  exit(1)
-limit = int(math.sqrt(n))
+if __name__ == "__main__":
+  # execute only if run as a script
+  parser = argparse.ArgumentParser(epilog="If more than 1 argument is provided, the script also calculates GCF and LCM.")
+  parser.add_argument("number", nargs="*", type=int, default=[12],
+    help="Positive integer to factorize into primes, default 12")
 
-factors = []
+  args = parser.parse_args()
+  fDict = {}
+  intersect = Counter()
+  union = Counter()
+ 
+  for n in args.number:
+    fDict[n] = primes(n)
+    print("The primes for %i are %s" % (n, fDict[n]))
+    if len(args.number) > 1:
+      if intersect:
+        intersect = intersect & Counter(fDict[n])
+      else:
+        intersect = Counter(fDict[n])
+      if union:
+        union = union | Counter(fDict[n])
+      else:
+        union = Counter(fDict[n])
+  if len(args.number) > 1:
+    print("GCF primes:", list(intersect.elements()), "=", math.prod(list(intersect.elements())))
+    print("LCM primes:", list(union.elements()), "=", math.prod(list(union.elements())))
 
-# Initialize with first prime
-i = 2
-while i <= limit:
-  if n % i:
-    i = i + 1
-  else:
-    factors.append(i)
-    n = n / i
-    limit = int(math.sqrt(n))
-
-factors.append(int(n))
-print("The primes are:", factors)
