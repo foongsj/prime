@@ -42,11 +42,11 @@ if __name__ == "__main__":
     fDict[n] = primes(n)
     print("The primes for %i are %s" % (n, fDict[n]))
     if len(args.number) > 1:
-      if setflag:
+      if iniFlag:
         intersect = intersect & Counter(fDict[n])
       else:
         intersect = Counter(fDict[n]) 
-      if setflag:
+      if iniFlag:
         union = union | Counter(fDict[n])
       else:
         union = Counter(fDict[n])
@@ -56,12 +56,12 @@ if __name__ == "__main__":
     try: # Use math.prod if available
       gcf = math.prod(list(intersect.elements()))
       lcm = math.prod(list(union.elements()))
-    except AttributeError: # fallback to reduce
+    except AttributeError: # fallback to reduce if math.prod is not available
       from functools import reduce
       lcm = reduce(lambda x,y: x*y, list(union.elements()))
-      if list(intersect.elements()):
+      try: # reduce will throw an error is empty, lcm should never be empty
         gcf = reduce(lambda x,y: x*y, list(intersect.elements()))
-      else:
+      except TypeError:
         gcf = 1
       
     print("GCF primes:", list(intersect.elements()), "=", gcf)
