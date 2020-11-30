@@ -36,7 +36,7 @@ if __name__ == "__main__":
   fDict = {}
   intersect = Counter()
   union = Counter()
-  setflag = 0 # On first entry to loop, initialize intersect and union
+  iniFlag = False # On first entry to loop, initialize intersect and union
  
   for n in args.number:
     fDict[n] = primes(n)
@@ -50,7 +50,7 @@ if __name__ == "__main__":
         union = union | Counter(fDict[n])
       else:
         union = Counter(fDict[n])
-      setflag = 1 # Mark that the intersect and union has been initialized
+      iniFlag = True # Mark that the intersect and union has been initialized
 
   if len(args.number) > 1:
     try: # Use math.prod if available
