@@ -2,6 +2,7 @@
 
 import argparse, math
 from collections import Counter
+from functools import reduce # in case math.prod is not yet supported
 
 def primes(n):
   # Returns a list of primes of n
@@ -50,6 +51,13 @@ if __name__ == "__main__":
       else:
         union = Counter(fDict[n])
   if len(args.number) > 1:
-    print("GCF primes:", list(intersect.elements()), "=", math.prod(list(intersect.elements())))
-    print("LCM primes:", list(union.elements()), "=", math.prod(list(union.elements())))
+    gcf = math.prod(list(intersect.elements()))
+    lcm = math.prod(list(union.elements()))
+    # if list(intersect.elements():
+    #   gcf = reduce(lambda x,y: x*y, list(intersect.elements()))
+    # else:
+    #   gcf = 1
+    # lcm = reduce(lambda x,y: x*y, list(union.elements()))
+    print("GCF primes:", list(intersect.elements()), "=", gcf)
+    print("LCM primes:", list(union.elements()), "=", lcm)
 
