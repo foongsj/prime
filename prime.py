@@ -2,7 +2,6 @@
 
 import argparse, math
 from collections import Counter
-from functools import reduce # in case math.prod is not yet supported
 
 def primes(n):
   # Returns a list of primes of n
@@ -37,27 +36,34 @@ if __name__ == "__main__":
   fDict = {}
   intersect = Counter()
   union = Counter()
+  setflag = 0 # On first entry to loop, initialize intersect and union
  
   for n in args.number:
     fDict[n] = primes(n)
     print("The primes for %i are %s" % (n, fDict[n]))
     if len(args.number) > 1:
-      if intersect:
+      if setflag:
         intersect = intersect & Counter(fDict[n])
       else:
-        intersect = Counter(fDict[n])
-      if union:
+        intersect = Counter(fDict[n]) 
+      if setflag:
         union = union | Counter(fDict[n])
       else:
         union = Counter(fDict[n])
+      setflag = 1 # Mark that the intersect and union has been initialized
+
   if len(args.number) > 1:
-    gcf = math.prod(list(intersect.elements()))
-    lcm = math.prod(list(union.elements()))
-    # if list(intersect.elements():
-    #   gcf = reduce(lambda x,y: x*y, list(intersect.elements()))
-    # else:
-    #   gcf = 1
-    # lcm = reduce(lambda x,y: x*y, list(union.elements()))
+    try: # Use math.prod if available
+      gcf = math.prod(list(intersect.elements()))
+      lcm = math.prod(list(union.elements()))
+    except AttributeError: # fallback to reduce
+      from functools import reduce
+      lcm = reduce(lambda x,y: x*y, list(union.elements()))
+      if list(intersect.elements()):
+        gcf = reduce(lambda x,y: x*y, list(intersect.elements()))
+      else:
+        gcf = 1
+      
     print("GCF primes:", list(intersect.elements()), "=", gcf)
     print("LCM primes:", list(union.elements()), "=", lcm)
 
