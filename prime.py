@@ -18,7 +18,10 @@ def primes(n):
   i = 2
   while i <= limit:
     if n % i: # is n divisible by i?
-      i = i + 1 # if not, increment i by 1
+      i = i + 1 # if not, increment i by 1. 
+      # We are wasting cycles by not checking if i is prime, but unless we already have a list of primes, 
+      # figuring out if i is prime may take even longer. By doing blind incrementing, non prime i
+      # will be skipped as they won't be able to divide the new n.
     else:
       factors.append(i) # otherwise, i is factor of n
       n = n / i 
