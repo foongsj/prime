@@ -44,7 +44,7 @@ if __name__ == "__main__":
  
   for n in args.number:
     fDict[n] = primes(n)
-    print("The primes for %i are %s" % (n, fDict[n]))
+    print("Primes for %i: %s" % (n, fDict[n]))
     if len(args.number) > 1:
       if iniFlag:
         intersect = intersect & Counter(fDict[n])
