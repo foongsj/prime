@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 
 import argparse, math
+# from rich import print
 from collections import Counter
 
 def primes(n):
