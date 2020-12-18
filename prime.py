@@ -12,7 +12,8 @@ def primes(n):
     return(factors)
   
   # The upper limit of prime factors of n cannot be more then the sqrt rounded down
-  limit = int(math.sqrt(n)+0.5)
+  # +0.01 in case of floating point precision errors
+  limit = int(math.sqrt(n)+0.01)
 
   # Initialize with first prime
   i = 2
@@ -25,7 +26,7 @@ def primes(n):
     else:
       factors.append(i) # otherwise, i is factor of n
       n = n / i 
-      limit = int(math.sqrt(n)+0.5)
+      limit = int(math.sqrt(n)+0.01)
   factors.append(int(n))
   return(factors)
 
